@@ -23,7 +23,7 @@ class _LoginPageState extends State<LoginPage> {
 
     // Regular expression for validating email
     String emailPattern =
-        r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$';
+        r'^[a-zA-Z0-9]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$';
     RegExp emailRegex = RegExp(emailPattern);
 
     if (email.isEmpty || !emailRegex.hasMatch(email)) {
