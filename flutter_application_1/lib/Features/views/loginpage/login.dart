@@ -1,14 +1,53 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/Features/views/homepage.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_application_1/constants/colors.dart';
 
-class LoginPage extends StatelessWidget {
+class LoginPage extends StatefulWidget {
+  @override
+  _LoginPageState createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+
+  // Boolean to toggle password visibility
+  bool _obscureText = true;
+
+  // Function to validate inputs
+  bool _validateInputs() {
+    String email = emailController.text.trim();
+    String password = passwordController.text.trim();
+
+    // Regular expression for validating email
+    String emailPattern =
+        r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$';
+    RegExp emailRegex = RegExp(emailPattern);
+
+    if (email.isEmpty || !emailRegex.hasMatch(email)) {
+      Get.snackbar(
+        "Invalid Email",
+        "Please enter a valid email address.",
+        backgroundColor: Colors.redAccent,
+        colorText: Colors.white,
+      );
+      return false;
+    }
+
+    if (password.isEmpty || password.length < 6) {
+      Get.snackbar(
+        "Invalid Password",
+        "Password must be at least 6 characters long.",
+        backgroundColor: Colors.redAccent,
+        colorText: Colors.white,
+      );
+      return false;
+    }
+
+    return true;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -19,13 +58,13 @@ class LoginPage extends StatelessWidget {
           "XI-Timer",
           style: GoogleFonts.roboto(color: AppColors.secondaryColor),
         ),
-        ),
+      ),
       body: Container(
         width: double.infinity,
         height: double.infinity,
         decoration: BoxDecoration(
           image: DecorationImage(
-            image: AssetImage("assets/login_background.jpg"), // Replace with your image path
+            image: AssetImage(""), // Replace with your image path
             fit: BoxFit.cover,
           ),
         ),
@@ -61,7 +100,7 @@ class LoginPage extends StatelessWidget {
                   SizedBox(height: 20),
                   TextField(
                     controller: passwordController,
-                    obscureText: true,
+                    obscureText: _obscureText, // Toggle visibility based on _obscureText
                     decoration: InputDecoration(
                       labelText: "Password",
                       filled: true,
@@ -70,14 +109,26 @@ class LoginPage extends StatelessWidget {
                         borderRadius: BorderRadius.circular(10),
                       ),
                       prefixIcon: Icon(Icons.lock, color: AppColors.primaryColor),
+                      suffixIcon: IconButton(
+                        icon: Icon(
+                          _obscureText ? Icons.visibility_off : Icons.visibility,
+                          color: AppColors.primaryColor,
+                        ),
+                        onPressed: () {
+                          setState(() {
+                            _obscureText = !_obscureText; // Toggle the obscureText state
+                          });
+                        },
+                      ),
                     ),
                   ),
-                  
-                  
                   SizedBox(height: 20),
                   ElevatedButton(
                     onPressed: () {
-                      Get.toNamed("/home");
+                      if (_validateInputs()) {
+                        // Navigate to the home page if validation is successful
+                        Get.toNamed("/home");
+                      }
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppColors.primaryColor,
@@ -98,7 +149,7 @@ class LoginPage extends StatelessWidget {
                     },
                     child: Text(
                       "Forgot Password?",
-                      style: TextStyle(color:  AppColors.primaryColor,fontSize: 14),
+                      style: TextStyle(color: AppColors.primaryColor, fontSize: 14),
                     ),
                   ),
                   TextButton(

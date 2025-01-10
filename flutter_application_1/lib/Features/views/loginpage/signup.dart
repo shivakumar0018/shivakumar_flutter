@@ -1,16 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/constants/colors.dart';
 import 'package:google_fonts/google_fonts.dart';
-class SignUpPage extends StatelessWidget {
+
+class SignUpPage extends StatefulWidget {
+  @override
+  _SignUpPageState createState() => _SignUpPageState();
+}
+
+class _SignUpPageState extends State<SignUpPage> {
   final TextEditingController usernameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+
+  // Boolean to toggle password visibility
+  bool _obscureText = true;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Sign Up",style: TextStyle(color:  AppColors.secondaryColor),),
+        title: Text(
+          "Sign Up",
+          style: TextStyle(color: AppColors.secondaryColor),
+        ),
         backgroundColor: AppColors.primaryColor,
       ),
       body: Padding(
@@ -19,14 +31,36 @@ class SignUpPage extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
-                    "Register Here",
-                    style: GoogleFonts.roboto(
-                      color: AppColors.primaryColor,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 30,
-                    ),
-                  ),
-                  SizedBox(height: 10,),
+              "Register Here",
+              style: GoogleFonts.roboto(
+                color: AppColors.primaryColor,
+                fontWeight: FontWeight.bold,
+                fontSize: 30,
+              ),
+            ),
+            SizedBox(height: 10),
+            TextField(
+              controller: usernameController,
+              decoration: InputDecoration(
+                labelText: "First Name",
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                prefixIcon: Icon(Icons.person, color: AppColors.primaryColor),
+              ),
+            ),
+            SizedBox(height: 20),
+            TextField(
+              controller: usernameController,
+              decoration: InputDecoration(
+                labelText: "Last Name (Optional)",
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                prefixIcon: Icon(Icons.person, color: AppColors.primaryColor),
+              ),
+            ),
+            SizedBox(height: 20),
             TextField(
               controller: usernameController,
               decoration: InputDecoration(
@@ -52,13 +86,24 @@ class SignUpPage extends StatelessWidget {
             SizedBox(height: 20),
             TextField(
               controller: passwordController,
-              obscureText: true,
+              obscureText: _obscureText, // Toggle visibility based on _obscureText
               decoration: InputDecoration(
                 labelText: "Password",
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10),
                 ),
                 prefixIcon: Icon(Icons.lock, color: AppColors.primaryColor),
+                suffixIcon: IconButton(
+                  icon: Icon(
+                    _obscureText ? Icons.visibility_off : Icons.visibility,
+                    color: AppColors.primaryColor,
+                  ),
+                  onPressed: () {
+                    setState(() {
+                      _obscureText = !_obscureText; // Toggle the obscureText state
+                    });
+                  },
+                ),
               ),
             ),
             SizedBox(height: 20),
@@ -75,7 +120,7 @@ class SignUpPage extends StatelessWidget {
               ),
               child: Text(
                 "SIGN UP",
-                style: TextStyle(color:AppColors.secondaryColor, fontSize: 18),
+                style: TextStyle(color: AppColors.secondaryColor, fontSize: 18),
               ),
             ),
           ],
